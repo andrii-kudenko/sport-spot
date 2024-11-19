@@ -7,4 +7,34 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <ItemGroup>
+    <None Remove="Views\Event\" />
+    <None Remove="Views\User\" />
+    <None Remove="DataLayer\" />
+    <None Remove="Middleware\" />
+    <None Remove="Views\Auth\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Event\" />
+    <Folder Include="Views\User\" />
+    <Folder Include="DataLayer\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Views\Auth\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SportSpot.Entities\SportSpot.Entities.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\SportSpot.Services\SportSpot.Services.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
 </Project>
