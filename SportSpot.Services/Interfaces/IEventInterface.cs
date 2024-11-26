@@ -12,6 +12,7 @@ namespace SportSpot.Services.Interfaces
         Task DeleteEventAsync(int id);
         Task<List<Event>> SearchEventsByLocationAsync(string location);
         Task<List<Event>> SearchEventsBySportTypeAsync(Sports sportType);
+        Task<List<Event>> GetFilteredEvents(string? searchTerm, Sports? category);
     }
 }
 
