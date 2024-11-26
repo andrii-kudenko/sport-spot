@@ -28,6 +28,19 @@
                                 </li>
                             }
                         </ul>
+                        
+                        <form asp-controller="Search" asp-action="Events" method="get" class="mb-3">
+                            <div class="mb-2">
+                                <label for="startDate">Date</label>
+                                <input type="date" id="date" name="date" value="@Model.Date?.ToString("yyyy-MM-dd")" class="form-control" />
+                            </div>          
+                            <div class="mb-2">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" name="location" value="@Model.Location" class="form-control" placeholder="Enter location" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        </form>
+
                     </div>                    
                 </form>
             </div>

@@ -22,13 +22,13 @@ namespace SportSpot.Operations.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Events(string? category, string? searchTerm)
+        public async Task<IActionResult> Events(string? category, string? searchTerm, DateOnly? date, string? location)
         {
             var selectedCategory = !string.IsNullOrEmpty(category)
                 ? Enum.Parse<Sports>(category)
                 : (Sports?)null;
 
-            var filteredEvents = await _eventInterface.GetFilteredEvents(searchTerm, selectedCategory);
+            var filteredEvents = await _eventInterface.GetFilteredEvents(searchTerm, selectedCategory, date, location);
 
             var categories = Enum.GetNames(typeof(Sports)).ToList();
             
@@ -36,6 +36,8 @@ namespace SportSpot.Operations.Controllers
             {
                 SelectedCategory = selectedCategory?.ToString(),
                 Categories = categories,
+                Date = date,
+                Location = location,
                 SearchResults = filteredEvents
             };
 
