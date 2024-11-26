@@ -1,0 +1,10 @@
+﻿body {
+}
+
+.highlighted {
+    color:black;
+    font-weight: bold;
+}
+.unhighlighted{
+    color: grey;
+}

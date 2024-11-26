@@ -2,6 +2,7 @@
 using SportSpot.Entities.Models;
 using SportSpot.Operations.Models;
 using SportSpot.Services.Interfaces;
+using System.Security.Claims;
 
 namespace SportSpot.Operations.Controllers
 {
@@ -62,6 +63,20 @@ namespace SportSpot.Operations.Controllers
         }*/
 
         [HttpGet]
+        public async Task<IActionResult> Users()
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> UserResults(string query)
+        {
+            
+            var currentUserId = HttpContext.Session.GetInt32("UserId");
+            var results = _userInterface.GetUsersByQuery(query, currentUserId);
+
+            return Json(results);
+        }   
+        /*[HttpGet]
         public async Task<IActionResult> SearchUsers(string city, Sports? sport)
         {
             List<User> users = new();
@@ -76,6 +91,6 @@ namespace SportSpot.Operations.Controllers
             }
 
             return PartialView("_UserSearchResults", users);
-        }
+        }*/
     }
 }

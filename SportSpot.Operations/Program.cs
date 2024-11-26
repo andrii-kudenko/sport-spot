@@ -8,6 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
@@ -38,8 +45,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCors("AllowAllOrigins");
 app.UseRouting();
 
 // Add these in this order

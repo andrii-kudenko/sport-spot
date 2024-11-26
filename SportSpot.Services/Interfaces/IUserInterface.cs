@@ -12,7 +12,7 @@ namespace SportSpot.Services.Interfaces
         Task<User> GetUserByEmailAsync(string email);
         Task<User> CreateUserAsync(User user);
         //Task<User> GetUserByEmailAsync(string email);  
-
+        Task<List<User>> GetUsersByQuery(string query, int? excludeId);
     }
 }
 
