@@ -78,5 +78,25 @@ namespace SportSpot.Services.Services
                 throw;
             }
         }
+
+        public async Task<List<User>> GetUsersByQuery(string query, int? excludeId)
+        {
+            /*return await _context.Users.Where(u => u.Name.ToLower().Contains(query) || u.Email.ToLower().Contains(query))
+                .OrderByDescending(u => u.Name.ToLower().Contains(query))
+                .ThenByDescending(u => u.Email.ToLower().Contains(query))
+                .ToListAsync();*/
+            Console.WriteLine($"{query} {excludeId}");
+            var results =  _context.Users
+    .Where(u => u.Id != excludeId)
+    .AsEnumerable() // Switch to client-side evaluation
+    .Where(u => u.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                u.Email.Substring(0, u.Email.IndexOf('@')).Contains(query, StringComparison.OrdinalIgnoreCase))
+    .OrderByDescending(u => u.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+    .ThenByDescending(u => u.Email.Substring(0, u.Email.IndexOf('@')).Contains(query, StringComparison.OrdinalIgnoreCase))
+    .ToList();
+
+            return results;
+
+        }
     }
 }

@@ -108,6 +108,26 @@ namespace SportSpot.Services.Services
                 .Include(e => e.RegisteredPlayers)
                 .ToListAsync();
         }
+
+        public async Task<List<Event>> GetFilteredEvents(string? searchTerm, Sports? category, DateOnly? date, string? location)
+        {
+            var events = _context.Events;
+            var query = events.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+                query = query.Where(e => e.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+
+            if (category.HasValue)
+                query = query.Where(e => e.SportType == category);
+            if (date.HasValue)
+                query = query.Where(e => DateOnly.FromDateTime(e.Date) == date);
+            if (!string.IsNullOrEmpty(location))
+                query = query.Where(e => e.Location.ToLower().Contains(location.ToLower()));
+
+            /*return await events.ToListAsync();*/
+            return await query.ToListAsync();
+            return query.ToList();
+        }
     }
 }
 
