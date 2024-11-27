@@ -193,7 +193,8 @@ namespace SportSpot.Operations.Controllers
                     return NotFound();
 
                 // Get the current user (hardcoded for now)
-                var user = await _userInterface.GetUserByIdAsync(1);
+                var userId = HttpContext.Session.GetInt32("UserId");
+                var user = await _userInterface.GetUserByIdAsync((int)userId);
                 if (user == null)
                     return NotFound();
 
