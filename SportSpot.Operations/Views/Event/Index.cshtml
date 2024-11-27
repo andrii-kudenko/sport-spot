@@ -1,0 +1,51 @@
+﻿@model IEnumerable<SportSpot.Entities.Models.Event>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Sport Events</h2>
+        <a asp-action="CreateEvent" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Create New Event
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No events found. Be the first to create one!
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <i class="bi bi-calendar"></i> @item.Date.ToString("MMM dd, yyyy HH:mm")
+                            </h6>
+                            <p class="card-text text-truncate">@item.Description</p>
+                            <div class="mb-2">
+                                <span class="badge bg-primary">@item.SportType</span>
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-people"></i> @item.RequiredPlayers needed
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-geo-alt text-muted me-2"></i>
+                                <span>@item.Location</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a asp-action="EventDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-info-circle"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

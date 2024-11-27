@@ -1,0 +1,34 @@
+﻿@model IEnumerable<SportSpot.Entities.Models.Event>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <i class="bi bi-calendar"></i> @item.Date.ToString("MMM dd, yyyy HH:mm")
+                    </h6>
+                    <p class="card-text text-truncate">@item.Description</p>
+                    <div class="mb-2">
+                        <span class="badge bg-primary">@item.SportType</span>
+                        <span class="badge bg-secondary">
+                            <i class="bi bi-people"></i> @item.RequiredPlayers needed
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt text-muted me-2"></i>
+                        <span>@item.Location</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-controller="Event" asp-action="EventDetails" asp-route-id="@item.Id"
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-info-circle"></i> View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
