@@ -76,9 +76,28 @@ namespace SportSpot.Services.Services
 
         public async Task<Event> UpdateEventAsync(Event @event)
         {
-            _context.Entry(@event).State = EntityState.Modified;
+            //_context.Entry(@event).State = EntityState.Modified;
+            // Fetch the existing entity from the database
+            var existingEvent = await _context.Events.FindAsync(@event.Id);
+            if (existingEvent == null)
+            {
+                throw new InvalidOperationException("Event not found.");
+            }
+
+            // Update properties
+            existingEvent.Title = @event.Title;
+            existingEvent.Description = @event.Description;
+            existingEvent.Date = @event.Date;
+            existingEvent.Location = @event.Location;
+            existingEvent.SportType = @event.SportType;
+            existingEvent.RequiredPlayers = @event.RequiredPlayers;
+
+            // Do not overwrite CreatorId unless explicitly specified
+            // existingEvent.CreatorId = updatedEvent.CreatorId;
+
             await _context.SaveChangesAsync();
-            return @event;
+            return existingEvent;
+
         }
 
         public async Task DeleteEventAsync(int id)

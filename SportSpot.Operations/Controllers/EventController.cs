@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SportSpot.Entities.Models;
 using SportSpot.Services.Interfaces;
 
@@ -60,11 +61,18 @@ namespace SportSpot.Operations.Controllers
 
         public async Task<IActionResult> EventDetails(int id)
         {
+            // Get user in this session
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var user = await _userInterface.GetUserByIdAsync((int)userId);
+
             try
             {
                 var @event = await _eventInterface.GetEventByIdAsync(id);
                 if (@event == null)
                     return NotFound();
+
+                ViewBag.CurrentUserId = userId;
+
                 return View(@event);
             }
             catch (Exception ex)
@@ -133,6 +141,13 @@ namespace SportSpot.Operations.Controllers
         [HttpGet]
         public async Task<IActionResult> EditEvent(int id)
         {
+
+            //if (user.Id != initialEvent.CreatorId)
+            //{
+
+            //    return RedirectToAction(nameof(Index));
+            //};
+
             try
             {
                 var @event = await _eventInterface.GetEventByIdAsync(id);
@@ -152,6 +167,7 @@ namespace SportSpot.Operations.Controllers
         {
             try
             {
+
                 if (ModelState.IsValid)
                 {
                     await _eventInterface.UpdateEventAsync(@event);
