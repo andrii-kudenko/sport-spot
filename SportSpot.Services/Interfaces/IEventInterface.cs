@@ -7,9 +7,13 @@ namespace SportSpot.Services.Interfaces
     {
         Task<List<Event>> GetAllEventsAsync();
         Task<Event> GetEventByIdAsync(int id);
+<<<<<<< HEAD
         Task<List<Event>> GetEventsByCreatorAsync(int creatorId);
         Task<Event> CreateEventAsync(Event @event);
 
+=======
+        Task<Event> CreateEventAsync(Event @event);
+>>>>>>> origin/master
         Task<Event> UpdateEventAsync(Event @event);
         Task DeleteEventAsync(int id);
         Task<List<Event>> SearchEventsByLocationAsync(string location);

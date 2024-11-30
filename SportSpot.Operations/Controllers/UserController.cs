@@ -8,12 +8,19 @@ namespace SportSpot.Operations.Controllers
     public class UserController : Controller
     {
         private readonly IUserInterface _userInterface;
+<<<<<<< HEAD
         private readonly IEventInterface _eventInterface;
 
         public UserController(IUserInterface userInterface, IEventInterface eventInterface)
         {
             _userInterface = userInterface;
             _eventInterface = eventInterface;
+=======
+
+        public UserController(IUserInterface userInterface)
+        {
+            _userInterface = userInterface;
+>>>>>>> origin/master
         }
 
         public async Task<IActionResult> Profile(int id)
@@ -21,11 +28,14 @@ namespace SportSpot.Operations.Controllers
             var user = await _userInterface.GetUserByIdAsync(id);
             if (user == null)
                 return NotFound();
+<<<<<<< HEAD
 
             var events = await _eventInterface.GetEventsByCreatorAsync(id);
             ViewBag.IsLoggedInUser = HttpContext.Session.GetInt32("UserId") == id;
             ViewBag.UserEvents = events;
 
+=======
+>>>>>>> origin/master
             return View(user);
         }
 
