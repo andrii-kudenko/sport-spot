@@ -48,58 +48,54 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-</div>
 
+</div>
 <div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h3>Events Created</h3>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Sport</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (ViewBag.UserEvents != null && ((List<SportSpot.Entities.Models.Event>)ViewBag.UserEvents).Any())
+<div class="card">
+    <div class="card-header">
+        <h3>Events Created</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Sport</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.UserEvents != null && ((List<SportSpot.Entities.Models.Event>)ViewBag.UserEvents).Any())
+                    {
+                        foreach (var @eventItem in (List<SportSpot.Entities.Models.Event>)ViewBag.UserEvents)
                         {
-                            foreach (var @eventItem in (List<SportSpot.Entities.Models.Event>)ViewBag.UserEvents)
-                            {
-                                <tr>
-                                    <td>@eventItem.Title</td>
-                                    <td>@eventItem.Date.ToString("yyyy-MM-dd")</td>
-                                    <td>@eventItem.SportType</td>
-                                    <td>
-                                        @if ((bool) ViewBag.IsLoggedInUser)
-                                                    {
-                                <a href="/Event/EditEvent/@eventItem.Id" class="btn btn-warning btn-sm">Edit</a>
-        }
-                                                    else
-                                                    {
-                                <a href="/Event/EventDetails/@eventItem.Id" class="btn btn-primary btn-sm">View</a>
-        }
-                            </td>
-                        </tr>
-    }
-}
+                            <tr>
+                                <td>@eventItem.Title</td>
+                                <td>@eventItem.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@eventItem.SportType</td>
+                                <td>
+                                    @if ((bool)ViewBag.IsLoggedInUser)
+                                    {
+                                        <a href="/Event/EditEvent/@eventItem.Id" class="btn btn-warning btn-sm">Edit</a>
+                                    }
                                     else
-{
+                                    {
+                                        <a href="/Event/EventDetails/@eventItem.Id" class="btn btn-primary btn-sm">View</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
                         <tr>
                             <td colspan="4" class="text-center">No events to display.</td>
                         </tr>
-}
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
-=======
->>>>>>> origin/master
 </div>

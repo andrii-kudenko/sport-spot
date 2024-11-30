@@ -67,16 +67,12 @@ namespace SportSpot.Services.Services
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-<<<<<<< HEAD
         public async Task<List<Event>> GetEventsByCreatorAsync(int creatorId)
         {
             return await _context.Events
                 .Where(e => e.CreatorId == creatorId)
                 .ToListAsync();
         }
-
-=======
->>>>>>> origin/master
         //public async Task<Event> CreateEventAsync(Event @event)
         //{
         //    _context.Events.Add(@event);
