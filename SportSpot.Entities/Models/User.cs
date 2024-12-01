@@ -42,6 +42,9 @@ namespace SportSpot.Entities.Models
         public string? Address { get; set; }
 
         public string? PostalCode { get; set; }
+
+        public List<int> FriendRequests { get; set; } = new List<int>();
+        public List<int> Friends { get; set; } = new List<int>();
     }
 }
 

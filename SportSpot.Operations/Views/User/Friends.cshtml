@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<User>
+
+<h3>Your Friends</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var friend in Model)
+            {
+                <tr>
+                    <td>@friend.Name</td>
+                    <td>@friend.Email</td>
+                    <td>
+                        <form asp-action="RemoveFriend" method="post" style="display:inline;">
+                            <input type="hidden" name="friendId" value="@friend.Id" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this friend?');">Remove</button>
+                        </form>
+                        <a asp-action="Profile" asp-route-id="@friend.Id" class="btn btn-primary">View Profile</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">Friends were not added yet.</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,5 +1,6 @@
 ﻿using System;
 using SportSpot.Entities.Models;
+using SportSpot.Operations.Models;
 
 namespace SportSpot.Services.Interfaces
 {
@@ -13,6 +14,14 @@ namespace SportSpot.Services.Interfaces
         Task<User> CreateUserAsync(User user);
         //Task<User> GetUserByEmailAsync(string email);  
         Task<List<User>> GetUsersByQuery(string query, int? excludeId);
+        //"friends" functionality related
+        Task<OperationResult> SendFriendRequestAsync(int userId, int targetUserId);
+        Task<OperationResult> AcceptFriendRequestAsync(int userId, int requesterId);
+        Task<OperationResult> DeclineFriendRequestAsync(int userId, int requesterId);
+        Task<List<User>> GetFriendsAsync(int userId);
+        Task<List<User>> GetPendingFriendRequestsAsync(int userId);
+        Task<List<User>> GetUsersByIdsAsync(List<int> userIds);
+        Task<OperationResult> RemoveFriendAsync(int userId, int friendId);
     }
 }
 

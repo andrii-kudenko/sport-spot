@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Event\" />
-    <Folder Include="Views\User\" />
     <Folder Include="DataLayer\" />
     <Folder Include="Middleware\" />
     <Folder Include="Views\Auth\" />

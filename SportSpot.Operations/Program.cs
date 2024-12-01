@@ -5,6 +5,8 @@ using SportSpot.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // Add logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

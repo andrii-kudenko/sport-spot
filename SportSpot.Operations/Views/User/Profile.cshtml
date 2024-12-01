@@ -1,11 +1,14 @@
-﻿@model SportSpot.Entities.Models.User
+﻿@model SportSpot.Operations.Models.ProfileViewModel
 
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>@Model.Name's Profile</h2>
-                <a asp-action="EditProfile" asp-route-id="@Model.Id" class="btn btn-primary">Edit Profile</a>
+                <h2>@Model.ProfileUser.Name's Profile</h2>
+                @if (Model.LoggedInUserId == Model.ProfileUser.Id)
+                {
+                    <a asp-action="EditProfile" asp-route-id="@Model.ProfileUser.Id" class="btn btn-primary">Edit Profile</a>
+                }
             </div>
         </div>
         <div class="card-body">
@@ -14,35 +17,35 @@
                     <h4>Personal Information</h4>
                     <dl class="row">
                         <dt class="col-sm-4">Age:</dt>
-                        <dd class="col-sm-8">@Model.Age</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.Age</dd>
 
-                        <dt class="col-sm-4">Height:</dt>
-                        <dd class="col-sm-8">@Model.Height cm</dd>
+                        <dt class="col-sm-4">Model.ProfileUser:</dt>
+                        <dd class="col-sm-8">@Model.ProfileUser.Height cm</dd>
 
                         <dt class="col-sm-4">Weight:</dt>
-                        <dd class="col-sm-8">@Model.Weight kg</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.Weight kg</dd>
 
                         <dt class="col-sm-4">Preferred Sport:</dt>
-                        <dd class="col-sm-8">@Model.Sports</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.Sports</dd>
                     </dl>
                 </div>
                 <div class="col-md-6">
                     <h4>Contact Information</h4>
                     <dl class="row">
                         <dt class="col-sm-4">Email:</dt>
-                        <dd class="col-sm-8">@Model.Email</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.Email</dd>
 
                         <dt class="col-sm-4">Phone:</dt>
-                        <dd class="col-sm-8">@Model.Phone</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.Phone</dd>
 
                         <dt class="col-sm-4">Location:</dt>
-                        <dd class="col-sm-8">@Model.City, @Model.Country</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.City, @Model.ProfileUser.Country</dd>
 
                         <dt class="col-sm-4">Address:</dt>
-                        <dd class="col-sm-8">@Model.Address</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.Address</dd>
 
                         <dt class="col-sm-4">Postal Code:</dt>
-                        <dd class="col-sm-8">@Model.PostalCode</dd>
+                        <dd class="col-sm-8">@Model.ProfileUser.PostalCode</dd>
                     </dl>
                 </div>
             </div>
@@ -50,8 +53,7 @@
     </div>
 
 </div>
-<div class="container mt-4">
-<div class="card">
+<div class="card mt-4">
     <div class="card-header">
         <h3>Events Created</h3>
     </div>
@@ -67,16 +69,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (ViewBag.UserEvents != null && ((List<SportSpot.Entities.Models.Event>)ViewBag.UserEvents).Any())
+                    @if (Model.Events.Any())
                     {
-                        foreach (var @eventItem in (List<SportSpot.Entities.Models.Event>)ViewBag.UserEvents)
+                        foreach (var eventItem in Model.Events)
                         {
                             <tr>
                                 <td>@eventItem.Title</td>
                                 <td>@eventItem.Date.ToString("yyyy-MM-dd")</td>
                                 <td>@eventItem.SportType</td>
                                 <td>
-                                    @if ((bool)ViewBag.IsLoggedInUser)
+                                    @if (Model.LoggedInUserId == Model.ProfileUser.Id)
                                     {
                                         <a href="/Event/EditEvent/@eventItem.Id" class="btn btn-warning btn-sm">Edit</a>
                                     }
@@ -99,3 +101,27 @@
         </div>
     </div>
 </div>
+@if (Model.LoggedInUserId == Model.ProfileUser.Id)
+{
+    <div class="d-flex">
+        <div class="me-4">
+            <a asp-action="Friends" class="btn btn-outline-primary">
+                Friends: @Model.FriendsCount
+            </a>
+        </div>
+        <div>
+            <a asp-action="FriendRequests" class="btn btn-outline-warning">
+                Requests: @Model.PendingRequestCount
+            </a>
+        </div>
+    </div>
+}
+@if (!Model.Friends.Any(f => f.Id == Model.ProfileUser.Id) &&
+   !Model.FriendRequests.Any(fr => fr.Id == Model.ProfileUser.Id) &&
+   Model.LoggedInUserId != Model.ProfileUser.Id)
+{
+    <form asp-action="SendFriendRequest" method="post">
+        <input type="hidden" name="targetUserId" value="@Model.ProfileUser.Id" />
+        <button type="submit" class="btn btn-primary">Add Friend</button>
+    </form>
+}

@@ -1,0 +1,40 @@
+﻿@model List<User>
+
+<h3>Pending Friend Requests</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td>@request.Name</td>
+                    <td>@request.Email</td>
+                    <td>
+                        <form asp-action="AcceptFriendRequest" method="post" style="display:inline;">
+                            <input type="hidden" name="requesterId" value="@request.Id" />
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <form asp-action="DeclineFriendRequest" method="post" style="display:inline;">
+                            <input type="hidden" name="requesterId" value="@request.Id" />
+                            <button type="submit" class="btn btn-danger">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">No pending friend requests.</td>
+            </tr>
+        }
+    </tbody>
+</table>

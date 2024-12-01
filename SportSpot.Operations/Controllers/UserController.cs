@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using SportSpot.Entities.Models;
+using SportSpot.Operations.Models;
 using SportSpot.Services.Interfaces;
+using SportSpot.Services.Services;
 
 namespace SportSpot.Operations.Controllers
 {
@@ -9,6 +12,7 @@ namespace SportSpot.Operations.Controllers
     {
         private readonly IUserInterface _userInterface;
         private readonly IEventInterface _eventInterface;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserController(IUserInterface userInterface, IEventInterface eventInterface)
         {
@@ -21,15 +25,29 @@ namespace SportSpot.Operations.Controllers
 
         public async Task<IActionResult> Profile(int id)
         {
-            var user = await _userInterface.GetUserByIdAsync(id);
-            if (user == null)
-                return NotFound();
 
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth"); 
+            }
+
+            var user = await _userInterface.GetUserByIdAsync(id); 
+            if (user == null) return NotFound(); 
+
+            // Fetch events created by the profile user
             var events = await _eventInterface.GetEventsByCreatorAsync(id);
-            ViewBag.IsLoggedInUser = HttpContext.Session.GetInt32("UserId") == id;
-            ViewBag.UserEvents = events;
 
-            return View(user);
+            var model = new ProfileViewModel
+            {
+                ProfileUser = user,
+                LoggedInUserId = loggedInUserId.Value, // Value is non-null due to the earlier check
+                Events = events,
+                Friends = await _userInterface.GetFriendsAsync(loggedInUserId.Value),
+                FriendRequests = await _userInterface.GetUsersByIdsAsync(user.FriendRequests)
+            };
+
+            return View(model); // Pass the view model to the view
         }
 
         [HttpGet]
@@ -51,6 +69,106 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction(nameof(Profile), new { id = user.Id });
             }
             return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendFriendRequest(int targetUserId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            await _userInterface.SendFriendRequestAsync(loggedInUserId.Value, targetUserId);
+
+            return RedirectToAction("Profile", new {id = targetUserId});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AcceptFriendRequest(int requesterId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            await _userInterface.AcceptFriendRequestAsync(loggedInUserId.Value, requesterId);
+
+            return RedirectToAction("FriendRequests");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeclineFriendRequest(int requesterId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            await _userInterface.DeclineFriendRequestAsync(loggedInUserId.Value, requesterId);
+
+            return RedirectToAction("FriendRequests");
+        }
+
+        //sending list of users who requested to view
+        [HttpGet]
+        public async Task<IActionResult> ViewFriendRequests()
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            var user = await _userInterface.GetUserByIdAsync(loggedInUserId.Value);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var friendRequests = await _userInterface.GetUsersByIdsAsync(user.FriendRequests);
+            return View(friendRequests);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Friends()
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var friends = await _userInterface.GetFriendsAsync(loggedInUserId.Value);
+            return View(friends);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> FriendRequests()
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var pendingRequests = await _userInterface.GetPendingFriendRequestsAsync(loggedInUserId.Value);
+            return View(pendingRequests);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFriend(int friendId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            await _userInterface.RemoveFriendAsync(loggedInUserId.Value, friendId);
+
+            return RedirectToAction("Friends");
         }
     }
 }
