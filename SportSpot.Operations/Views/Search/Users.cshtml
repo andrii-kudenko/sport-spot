@@ -1,8 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     ViewData["Title"] = "Search Events";
+    Layout = "~/Views/Shared/_SearchingLayout.cshtml";
 }
 
 <h2>Search Players</h2>
@@ -10,12 +8,29 @@
 <div class="container-fluid mt-4">
     <div class="container">
         <div class="search-bar">
-            <div class="col-12 col-md-8 mx-auto">
-                <div class="input-group input-group-lg">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search for users..." aria-label="Search">
-                </div>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for users..." aria-label="Search">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg></input>
+            <div id="result-section">
+                <ul id="users-result-list">
+                    @* <a href="/User/Profile/" class="users-result-link"><li class="users-result-list-item">
+                        <h5 class="card-title unhighlighted">Name (Toronto)</h5>
+                        <p class="unhighlighted">sample@gmail.com</p>
+                        <a href="/User/Profile/" class="btn btn-primary search-view-user-btn">View Profile</a>
+                    </li></a>
+                    <a href="/User/Profile/" class="users-result-link">
+                    <li class="users-result-list-item">
+                        <h5 class="card-title unhighlighted">Name (Oakville)</h5>
+                        <p class="unhighlighted">sample@gmail.com</p>
+                        <a href="/User/Profile/" class="btn btn-primary search-view-user-btn">View Profile</a>
+                    </li></a>
+
+
+                    <li class="users-result-list-item">Example2</li> *@
+                </ul>
             </div>
         </div>
+
+
         <div class="mt-4 player-results" id="resultsContainer" style="display: none;">
             <h2>Search Results</h2>
             <div id="results" class="row">
