@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+SportSpot.Operations/DataLayer/SportSpot.db
+SportSpot.Operations/DataLayer/SportSpot.db-shm
+SportSpot.Operations/DataLayer/SportSpot.db-wal
+SportSpot.Operations/DataLayer/SportSpot.db
