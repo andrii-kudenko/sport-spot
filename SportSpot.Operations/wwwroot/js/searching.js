@@ -1,6 +1,16 @@
 ﻿let debounceTimer;
 
 /*alert("Hello")*/
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Select the search input field by its ID
+    const searchInput = document.getElementById("searchInput");
+
+    // Clear the value of the search input
+    if (searchInput) {
+        searchInput.value = "";
+    }
+});
 document.getElementById("searchInput").addEventListener("input", function () {
     const searchQuery = this.value.trim();
 
@@ -35,20 +45,22 @@ document.getElementById("searchInput").addEventListener("input", function () {
 });
 
 function displayResults(results, searchQuery) {
-    const resultsContainer = document.getElementById("resultsContainer");
-    const resultsDiv = document.getElementById("results");
+    const resultsContainer = document.getElementById("result-section");
+    const resultsDiv = document.getElementById("users-result-list");
 
     resultsDiv.innerHTML = '';
 
     if (results.length === 0) {
-        resultsDiv.innerHTML = `<p>No results found.</p>`;
+        resultsDiv.innerHTML = `<li class="users-result-list-item">
+                <p>No results found.</p>
+            </li>`;
     } else {
         results.forEach(result => {
             const highlightedName = highlightMatch(result.name, searchQuery);
             const email = result.email.split("@");
             const highlightedEmail = highlightMatch(email[0], searchQuery);
             /*const highlightedEmail = highlightMatch(result.email, searchQuery);*/
-            const card = `
+            /*const card = `
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-body">
@@ -58,7 +70,17 @@ function displayResults(results, searchQuery) {
                         </div>
                     </div>
                 </div>
+            `;*/
+            const card = `
+            <a href="/User/Profile/${result.id}" class="users-result-link">
+            <li class="users-result-list-item">
+                <h5 class="card-title unhighlighted mb-8">${highlightedName}</h5>
+                <p class="unhighlighted mb-6">${highlightedEmail}@${email[1]}</p>
+                <svg class="view-user-arrow" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m242-200 200-280-200-280h98l200 280-200 280h-98Zm238 0 200-280-200-280h98l200 280-200 280h-98Z"/></svg>
+            </li>
+            </a>
             `;
+            
             resultsDiv.innerHTML += card;
         });
     }
@@ -67,8 +89,8 @@ function displayResults(results, searchQuery) {
 }
 
 function clearResults() {
-    const resultsContainer = document.getElementById("resultsContainer");
-    const resultsDiv = document.getElementById("results");
+    const resultsContainer = document.getElementById("result-section");
+    const resultsDiv = document.getElementById("users-result-list");
 
     resultsDiv.innerHTML = '';
     resultsContainer.style.display = 'none';
