@@ -96,12 +96,14 @@ namespace SportSpot.Services.Services
             }
         }
 
+        /*
+            Author: Andrii Kudenko
+            Description: Get Filtered Users
+            Parameter: String query, int excludeId for the user not to query himself
+            Return: Filtered list of users
+         */
         public async Task<List<User>> GetUsersByQuery(string query, int? excludeId)
         {
-            /*return await _context.Users.Where(u => u.Name.ToLower().Contains(query) || u.Email.ToLower().Contains(query))
-                .OrderByDescending(u => u.Name.ToLower().Contains(query))
-                .ThenByDescending(u => u.Email.ToLower().Contains(query))
-                .ToListAsync();*/
             Console.WriteLine($"{query} {excludeId}");
             var results =  _context.Users
                 .Where(u => u.Id != excludeId)

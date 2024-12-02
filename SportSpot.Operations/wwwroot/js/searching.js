@@ -1,6 +1,8 @@
-﻿let debounceTimer;
+﻿/* Author: Andrii Kudenko
+   Description: javascript file for dynamic querying and displaying of players' information
+*/
 
-/*alert("Hello")*/
+let debounceTimer;
 
 document.addEventListener("DOMContentLoaded", function () {
     // Select the search input field by its ID

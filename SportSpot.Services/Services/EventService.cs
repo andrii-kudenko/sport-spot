@@ -190,18 +190,15 @@ namespace SportSpot.Services.Services
         }
 
         /*
-            Author: 
-            Description: Get Filtered Event
-            Parameter: 
-            Return:
-         */
-        public async Task<List<Event>> GetFilteredEvents(string? searchTerm, Sports? category, DateOnly? date, string? location)
+            Author: Andrii Kudenko
+            Description: Get Filtered Events
+            Parameter: Sports enum category, DateOnly date, string location
+            Return: Filtered list of events
+         */        
+        public async Task<List<Event>> GetFilteredEvents(Sports? category, DateOnly? date, string? location)
         {
             var events = _context.Events;
             var query = events.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTerm))
-                query = query.Where(e => e.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
 
             if (category.HasValue)
                 query = query.Where(e => e.SportType == category);
@@ -209,10 +206,7 @@ namespace SportSpot.Services.Services
                 query = query.Where(e => DateOnly.FromDateTime(e.Date) == date);
             if (!string.IsNullOrEmpty(location))
                 query = query.Where(e => e.Location.ToLower().Contains(location.ToLower()));
-
-            /*return await events.ToListAsync();*/
             return await query.ToListAsync();
-            return query.ToList();
         }
     }
 }
