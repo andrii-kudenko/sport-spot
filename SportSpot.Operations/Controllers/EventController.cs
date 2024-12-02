@@ -87,13 +87,15 @@ namespace SportSpot.Operations.Controllers
             // Get user in this session
             var userId = HttpContext.Session.GetInt32("UserId");
             var user = await _userInterface.GetUserByIdAsync((int)userId);
+            var userFriends = await _userInterface.GetFriendsAsync((int)userId);
 
             try
             {
                 var @event = await _eventInterface.GetEventByIdAsync(id);
                 if (@event == null)
                     return NotFound();
-
+                if (@event.CreatorId == userId)
+                    ViewBag.CreatorFriends = userFriends;
                 ViewBag.CurrentUserId = userId;
 
                 return View(@event);
@@ -294,5 +296,19 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction(nameof(EventDetails), new { id = eventId });
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> InviteUser(int eventId, int playerId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            await _userInterface.SendInviteRequestAsync(eventId, playerId);
+            await _notificationService.AddNotificationAsync(playerId, "You have a new invintation!", "/User/Invintations");
+            return RedirectToAction("EventDetails", new { id = eventId });
+        }
+
     }
 }

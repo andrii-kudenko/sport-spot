@@ -158,6 +158,19 @@ namespace SportSpot.Operations.Controllers
             return View(pendingRequests);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Invintations()
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var pendingRequests = await _userInterface.GetPendingInvintationAsync(loggedInUserId.Value);
+            return View(pendingRequests);
+        }
+
         [HttpPost]
         public async Task<IActionResult> RemoveFriend(int friendId)
         {
@@ -170,6 +183,32 @@ namespace SportSpot.Operations.Controllers
             await _userInterface.RemoveFriendAsync(loggedInUserId.Value, friendId);
 
             return RedirectToAction("Friends");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AcceptInvintation(int eventId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            await _userInterface.AcceptInvintationAsync(loggedInUserId.Value, eventId);
+            await _notificationService.AddNotificationAsync(eventId, "Your friend request has been accepted!", "/User/Friends");
+            return RedirectToAction("Profile", new { id = loggedInUserId});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeclineInvintation(int eventId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            await _userInterface.DeclineInvintationAsync(loggedInUserId.Value, eventId);
+            await _notificationService.AddNotificationAsync(eventId, "Your friend request was declined.", "/User/Search");
+
+            return RedirectToAction("Profile", new { id = loggedInUserId });
         }
     }
 }

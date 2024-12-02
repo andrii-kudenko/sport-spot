@@ -60,19 +60,7 @@ function displayResults(results, searchQuery) {
         results.forEach(result => {
             const highlightedName = highlightMatch(result.name, searchQuery);
             const email = result.email.split("@");
-            const highlightedEmail = highlightMatch(email[0], searchQuery);
-            /*const highlightedEmail = highlightMatch(result.email, searchQuery);*/
-            /*const card = `
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title unhighlighted">${highlightedName}</h5>
-                            <p class="unhighlighted">${highlightedEmail}@${email[1]}</p>                            
-                            <a href="/User/Profile/${result.id}" class="btn btn-primary">View Profile</a>
-                        </div>
-                    </div>
-                </div>
-            `;*/
+            const highlightedEmail = highlightMatch(email[0], searchQuery);            
             const card = `
             <a href="/User/Profile/${result.id}" class="users-result-link">
             <li class="users-result-list-item">

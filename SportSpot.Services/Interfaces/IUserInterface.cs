@@ -22,6 +22,10 @@ namespace SportSpot.Services.Interfaces
         Task<List<User>> GetPendingFriendRequestsAsync(int userId);
         Task<List<User>> GetUsersByIdsAsync(List<int> userIds);
         Task<OperationResult> RemoveFriendAsync(int userId, int friendId);
+        Task<OperationResult> SendInviteRequestAsync(int eventId, int targetUserId);
+        Task<OperationResult> AcceptInvintationAsync(int userId, int eventId);
+        Task<OperationResult> DeclineInvintationAsync(int userId, int eventId);
+        Task<List<Event>> GetPendingInvintationAsync(int userId);
     }
 }
 

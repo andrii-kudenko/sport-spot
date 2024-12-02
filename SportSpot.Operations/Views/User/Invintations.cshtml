@@ -1,0 +1,40 @@
+﻿@model List<Event>
+
+<h3>Pending Invintations</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td>@request.Title</td>
+                    <td>@request.Description</td>
+                    <td>
+                        <form asp-action="AcceptInvintation" method="post" style="display:inline;">
+                            <input type="hidden" name="requesterId" value="@request.Id" />
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <form asp-action="DeclineInvintation" method="post" style="display:inline;">
+                            <input type="hidden" name="requesterId" value="@request.Id" />
+                            <button type="submit" class="btn btn-danger">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">No pending invintations.</td>
+            </tr>
+        }
+    </tbody>
+</table>

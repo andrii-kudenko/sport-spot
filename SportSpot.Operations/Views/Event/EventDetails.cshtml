@@ -82,4 +82,36 @@
             </a>
         </div>
     </div>
+    @if (ViewBag.CreatorFriends != null)
+    {
+        <div class="user-list-container">
+            <ul class="user-list">
+                @foreach (var player in ViewBag.CreatorFriends)
+                {
+                    <li class="user-list-item">
+                        <div class="user-info">
+                            <h5 class="user-name">@player.Name</h5>
+                            <p class="user-email">@player.Email</p>
+                        </div>
+                        <form asp-action="InviteUser" asp-route-eventId="@Model.Id" method="post" class="mt-3">
+                            @Html.AntiForgeryToken()
+                            <!-- Hidden input for Model.Id -->
+                            <input type="hidden" name="eventId" value="@Model.Id" />
+
+                            <!-- Hidden input for playerId -->
+                            <input type="hidden" name="playerId" value="@player.Id" />
+
+                            <button type="submit" class="invite-button">
+                                Invite
+                            </button>
+                        </form>
+                        
+                    </li>
+                }
+            </ul>
+        </div>
+
+    }
+    
 </div>
+
