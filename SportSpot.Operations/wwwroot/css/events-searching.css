@@ -1,50 +1,18 @@
-﻿/* General Layout */
+﻿/* Author: Andrii Kudenko
+   Description: css file for more appealing look of the page for searching events
+*/
 body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(180deg, #f8f9fa, #e9ecef);
     color: #212529;
 }
 
-/* Header Styling */
 h5, h6 {
     font-weight: 600;
     margin-bottom: 15px;
     color: #343a40;
 }
 
-/* Filters Section */
-/*.filters {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-    .filters h5 {
-        color: #495057;
-    }
-
-    .filters ul {
-        padding-left: 0;
-        list-style: none;
-    }
-
-    .filters li {
-        margin-bottom: 10px;
-    }
-
-        .filters li a {
-            text-decoration: none;
-            color: red;
-        }
-
-        .filters li.active a {
-            font-weight: bold;
-            color: aqua;
-        }*/
-
-/* Card Styling */
 .card {
     border-radius: 10px;
     overflow: hidden;
@@ -79,7 +47,6 @@ h5, h6 {
     text-align: center;
 }
 
-/* Badge Styling */
 .badge {
     margin-right: 5px;
     padding: 5px 10px;
@@ -97,13 +64,11 @@ h5, h6 {
         color: #ffffff;
     }
 
-/* Search Results Layout */
+
 .row.g-3 {
     gap: 20px;
 }
 
-
-    /* Button Styling */
 .btn-outline-primary {
     border-color: #007bff;
     color: #007bff;
@@ -149,7 +114,3 @@ h5, h6 {
     background: rgb(227, 244, 255, 0.4);
     border-radius: 6px;
 }
-
-/*.active-category a {
-    color: rgb(69, 139, 245);
-}*/

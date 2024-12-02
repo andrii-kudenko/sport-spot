@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SportSpot.Entities.Models;
 using SportSpot.Operations.Models;
 using SportSpot.Services.Data;
@@ -96,12 +97,14 @@ namespace SportSpot.Services.Services
             }
         }
 
+        /*
+            Author: Andrii Kudenko
+            Description: Get Filtered Users
+            Parameter: String query, int excludeId for the user not to query himself
+            Return: Filtered list of users
+         */
         public async Task<List<User>> GetUsersByQuery(string query, int? excludeId)
         {
-            /*return await _context.Users.Where(u => u.Name.ToLower().Contains(query) || u.Email.ToLower().Contains(query))
-                .OrderByDescending(u => u.Name.ToLower().Contains(query))
-                .ThenByDescending(u => u.Email.ToLower().Contains(query))
-                .ToListAsync();*/
             Console.WriteLine($"{query} {excludeId}");
             var results =  _context.Users
                 .Where(u => u.Id != excludeId)
@@ -114,6 +117,75 @@ namespace SportSpot.Services.Services
 
             return results;
 
+        }
+
+        public async Task<OperationResult> SendInviteRequestAsync(int eventId, int targetUserId)
+        {
+            var targetUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetUserId);
+            if (targetUser == null)
+            {
+                return new OperationResult { Success = false, Message = "Target user not found." };
+            }
+
+            if (targetUser.Invintations.Contains(eventId))
+            {
+                return new OperationResult { Success = false, Message = "Invintation already sent." };
+            }
+
+            targetUser.Invintations.Add(eventId);
+            await _context.SaveChangesAsync();
+            return new OperationResult { Success = true, Message = "Invintation sent successfully." };
+        }
+        public async Task<OperationResult> AcceptInvintationAsync(int userId, int eventId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var targetEvent = await _context.Events.FirstOrDefaultAsync(u => u.Id == eventId);
+
+            if (user == null || targetEvent == null)
+            {
+                return new OperationResult { Success = false, Message = "User not found." };
+            }
+
+            if (!user.FriendRequests.Contains(eventId))
+            {
+                return new OperationResult { Success = false, Message = "No invintations for this event." };
+            }
+            if (targetEvent.RegisteredPlayers == null)
+                targetEvent.RegisteredPlayers = new List<User>();
+
+           
+            targetEvent.RegisteredPlayers.Add(user);                
+            user.Invintations.Remove(eventId);            
+            await _context.SaveChangesAsync();
+            return new OperationResult { Success = true, Message = "Invintation accepted." };
+        }
+
+        public async Task<OperationResult> DeclineInvintationAsync(int userId, int eventId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return new OperationResult { Success = false, Message = "User not found." };
+            }
+
+            if (!user.Invintations.Contains(eventId))
+            {
+                return new OperationResult { Success = false, Message = "No invintation for this event." };
+            }
+
+            user.Invintations.Remove(eventId);
+            await _context.SaveChangesAsync();
+            return new OperationResult { Success = true, Message = "Invintation declined." };
+        }
+        public async Task<List<Event>> GetPendingInvintationAsync(int userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) return new List<Event>();
+
+            return await _context.Events
+                .Where(u => user.Invintations.Contains(u.Id))
+                .ToListAsync();
         }
 
 

@@ -8,40 +8,45 @@ using SportSpot.Services.Services;
 
 namespace SportSpot.Operations.Controllers
 {
-    public class UserController : Controller
+    /*  Author: Omar, Nhat Truong Luu, Danylo Chystov
+        Description: Controller for handling notifications
+    */
+    public class UserController : BaseController
     {
         private readonly IUserInterface _userInterface;
         private readonly IEventInterface _eventInterface;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(IUserInterface userInterface, IEventInterface eventInterface)
+        public UserController(IUserInterface userInterface, IEventInterface eventInterface, INotificationInterface notificationService): base(notificationService)
         {
+            
             _userInterface = userInterface;
             _eventInterface = eventInterface;
-
         }
 
         
-
+        //controls profile view, fetches data for user by passed id, sends data to the view
         public async Task<IActionResult> Profile(int id)
         {
-
+            //validate that user is logged in
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
             {
                 return RedirectToAction("Login", "Auth"); 
             }
 
+            //get user by passed id
             var user = await _userInterface.GetUserByIdAsync(id); 
             if (user == null) return NotFound(); 
 
-            // Fetch events created by the profile user
+            //fetch events created by the profile user
             var events = await _eventInterface.GetEventsByCreatorAsync(id);
 
+            //use profile model to store information that will be shown on page
             var model = new ProfileViewModel
             {
                 ProfileUser = user,
-                LoggedInUserId = loggedInUserId.Value, // Value is non-null due to the earlier check
+                LoggedInUserId = loggedInUserId.Value, 
                 Events = events,
                 Friends = await _userInterface.GetFriendsAsync(loggedInUserId.Value),
                 FriendRequests = await _userInterface.GetUsersByIdsAsync(user.FriendRequests)
@@ -50,6 +55,8 @@ namespace SportSpot.Operations.Controllers
             return View(model); // Pass the view model to the view
         }
 
+
+        //controls edit profile page, gets user by passd id (currently logged in user), sends data to the view
         [HttpGet]
         public async Task<IActionResult> EditProfile(int id)
         {
@@ -59,6 +66,7 @@ namespace SportSpot.Operations.Controllers
             return View(user);
         }
 
+        //receives data to update user, updates user on button click
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditProfile(User user)
@@ -71,6 +79,7 @@ namespace SportSpot.Operations.Controllers
             return View(user);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> SendFriendRequest(int targetUserId)
         {
@@ -81,7 +90,7 @@ namespace SportSpot.Operations.Controllers
             }
 
             await _userInterface.SendFriendRequestAsync(loggedInUserId.Value, targetUserId);
-
+            await _notificationService.AddNotificationAsync(targetUserId, "You have a new friend request!", "/User/FriendRequests");
             return RedirectToAction("Profile", new {id = targetUserId});
         }
 
@@ -94,7 +103,7 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction("Login", "Auth");
             }
             await _userInterface.AcceptFriendRequestAsync(loggedInUserId.Value, requesterId);
-
+            await _notificationService.AddNotificationAsync(requesterId,"Your friend request has been accepted!","/User/Friends");
             return RedirectToAction("FriendRequests");
         }
 
@@ -107,6 +116,7 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction("Login", "Auth");
             }
             await _userInterface.DeclineFriendRequestAsync(loggedInUserId.Value, requesterId);
+            await _notificationService.AddNotificationAsync(requesterId,"Your friend request was declined.","/User/Search");
 
             return RedirectToAction("FriendRequests");
         }
@@ -130,6 +140,7 @@ namespace SportSpot.Operations.Controllers
             return View(friendRequests);
         }
 
+        //controls friends page, retrievs friends of the logged in user
         [HttpGet]
         public async Task<IActionResult> Friends()
         {
@@ -143,7 +154,7 @@ namespace SportSpot.Operations.Controllers
             return View(friends);
         }
 
-
+        //controlls friends request page, fetches request sent to logged in user
         [HttpGet]
         public async Task<IActionResult> FriendRequests()
         {
@@ -169,6 +180,32 @@ namespace SportSpot.Operations.Controllers
             await _userInterface.RemoveFriendAsync(loggedInUserId.Value, friendId);
 
             return RedirectToAction("Friends");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AcceptInvintation(int eventId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            await _userInterface.AcceptInvintationAsync(loggedInUserId.Value, eventId);
+            await _notificationService.AddNotificationAsync(eventId, "Your friend request has been accepted!", "/User/Friends");
+            return RedirectToAction("Profile", new { id = loggedInUserId});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeclineInvintation(int eventId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            await _userInterface.DeclineInvintationAsync(loggedInUserId.Value, eventId);
+            await _notificationService.AddNotificationAsync(eventId, "Your friend request was declined.", "/User/Search");
+
+            return RedirectToAction("Profile", new { id = loggedInUserId });
         }
     }
 }

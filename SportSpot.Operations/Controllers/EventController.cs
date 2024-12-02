@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+    Author: Nhat Truong Luu, Omar
+    Description: Controller Class of all Method related to Event such as CRUD of Event database or Searching Event Functionality
+ */
+
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SportSpot.Entities.Models;
@@ -6,12 +11,15 @@ using SportSpot.Services.Interfaces;
 
 namespace SportSpot.Operations.Controllers
 {
-    public class EventController : Controller
+    public class EventController : BaseController
     {
+        // Event Service using Sqlite Service
         private readonly IEventInterface _eventInterface;
-        private readonly IUserInterface _userInterface;
 
-        public EventController(IEventInterface eventInterface, IUserInterface userInterface)
+        // User Service using Sqlite Service
+        private readonly IUserInterface _userInterface;
+        // Constructor to inject the Interface for Event and User
+        public EventController(IEventInterface eventInterface, IUserInterface userInterface, INotificationInterface notificationService): base(notificationService)
         {
             _eventInterface = eventInterface;
             _userInterface = userInterface;
@@ -31,10 +39,19 @@ namespace SportSpot.Operations.Controllers
         //    }
         //}
 
+        // Method to return View of Search page for Event
         public async Task<IActionResult> Search()
         {
             return View();
         }
+
+        /* 
+            Author: Omar
+            Method with HTTP GET for Searching Event
+            Parameter: string location: Location of Event
+                       Sports sportType: The Sport Type of Event
+            Return: Partial Event if Event Result
+         */
 
         [HttpGet]
         public async Task<IActionResult> SearchEvents(string location, Sports? sportType)
@@ -59,18 +76,26 @@ namespace SportSpot.Operations.Controllers
             }
         }
 
+        /* 
+            Author: Omar
+            Method with for showing Event Details
+            Parameter: int id: Id of Event
+            Return: View of Event or Index View if Error
+         */
         public async Task<IActionResult> EventDetails(int id)
         {
             // Get user in this session
             var userId = HttpContext.Session.GetInt32("UserId");
             var user = await _userInterface.GetUserByIdAsync((int)userId);
+            var userFriends = await _userInterface.GetFriendsAsync((int)userId);
 
             try
             {
                 var @event = await _eventInterface.GetEventByIdAsync(id);
                 if (@event == null)
                     return NotFound();
-
+                if (@event.CreatorId == userId)
+                    ViewBag.CreatorFriends = userFriends;
                 ViewBag.CurrentUserId = userId;
 
                 return View(@event);
@@ -82,6 +107,10 @@ namespace SportSpot.Operations.Controllers
             }
         }
 
+        /* 
+            Author: Omar
+            Method with HTTP GET for Creating Event
+         */
         [HttpGet]
         public IActionResult CreateEvent()
         {
@@ -92,6 +121,12 @@ namespace SportSpot.Operations.Controllers
             });
         }
 
+        /* 
+            Author: Omar
+            Method with HTTP POST for Creating Event
+            Parameter: Event @event: Event model from View
+            Return: Views according to Validity of ModelState
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateEvent(Event @event)
@@ -103,10 +138,10 @@ namespace SportSpot.Operations.Controllers
                     var userId = HttpContext.Session.GetInt32("UserId");
                     if (!userId.HasValue)
                     {
-                        return RedirectToAction("Login", "Auth");
+                        return RedirectToAction("Login", "Auth"); // Go to Login page for authentication
                     }
 
-                    @event.CreatorId = userId.Value;
+                    @event.CreatorId = userId.Value; // Assign User Id to the Creator Id
                     @event.RegisteredPlayers = new List<User>();
 
                     await _eventInterface.CreateEventAsync(@event);
@@ -122,6 +157,10 @@ namespace SportSpot.Operations.Controllers
         }
 
 
+        /* 
+            Author: Omar
+            Method For Index Event
+         */
         public async Task<IActionResult> Index()
         {
             try
@@ -138,6 +177,13 @@ namespace SportSpot.Operations.Controllers
                 return View(new List<Event>());
             }
         }
+
+        /* 
+            Author: Nhat Truong Luu
+            Method with HTTP GET for Editting Event
+            Parameter: int id: Id of event
+            Return: Event View according to the Event
+         */
         [HttpGet]
         public async Task<IActionResult> EditEvent(int id)
         {
@@ -161,13 +207,19 @@ namespace SportSpot.Operations.Controllers
             }
         }
 
+        /* 
+            Author: Nhat Truong Luu
+            Method with HTTP POST for Editting Event
+            Parameter: Event event: Event model from View
+            Return: Event View according to the ModelState
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditEvent(Event @event)
         {
             try
             {
-
+                // Check if Model is Valid or now
                 if (ModelState.IsValid)
                 {
                     await _eventInterface.UpdateEventAsync(@event);
@@ -182,6 +234,12 @@ namespace SportSpot.Operations.Controllers
             }
         }
 
+        /* 
+            Author: Omar
+            Method with HTTP POST for Deleting Event
+            Parameter: int id: Id of Event
+            Return: Index View
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteEvent(int id)
@@ -198,17 +256,24 @@ namespace SportSpot.Operations.Controllers
             }
         }
 
+        /* 
+            Author: Nhat Truong, Omar
+            Method with HTTP POST for User joining Event
+            Parameter: int eventId: Id of Event
+            Return: Event Views
+         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> JoinEvent(int eventId)
         {
             try
             {
+                // Get Event chosen
                 var @event = await _eventInterface.GetEventByIdAsync(eventId);
                 if (@event == null)
                     return NotFound();
 
-                // Get the current user (hardcoded for now)
+                // Get the current user based on Session
                 var userId = HttpContext.Session.GetInt32("UserId");
                 var user = await _userInterface.GetUserByIdAsync((int)userId);
                 if (user == null)
@@ -231,5 +296,19 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction(nameof(EventDetails), new { id = eventId });
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> InviteUser(int eventId, int playerId)
+        {
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            await _userInterface.SendInviteRequestAsync(eventId, playerId);
+            await _notificationService.AddNotificationAsync(playerId, "You have a new invintation!", "/User/Invintations");
+            return RedirectToAction("EventDetails", new { id = eventId });
+        }
+
     }
 }

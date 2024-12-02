@@ -1,14 +1,12 @@
-﻿@model List<User>
-@* Author: Danylo Chystov
-Description: Page showing pending friend requests *@
+﻿@model List<Event>
 
-<h3>Pending Friend Requests</h3>
+<h3>Pending Invintations</h3>
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -17,14 +15,14 @@ Description: Page showing pending friend requests *@
             @foreach (var request in Model)
             {
                 <tr>
-                    <td>@request.Name</td>
-                    <td>@request.Email</td>
+                    <td>@request.Title</td>
+                    <td>@request.Description</td>
                     <td>
-                        <form asp-action="AcceptFriendRequest" method="post" style="display:inline;">
+                        <form asp-action="AcceptInvintation" method="post" style="display:inline;">
                             <input type="hidden" name="requesterId" value="@request.Id" />
                             <button type="submit" class="btn btn-success">Accept</button>
                         </form>
-                        <form asp-action="DeclineFriendRequest" method="post" style="display:inline;">
+                        <form asp-action="DeclineInvintation" method="post" style="display:inline;">
                             <input type="hidden" name="requesterId" value="@request.Id" />
                             <button type="submit" class="btn btn-danger">Decline</button>
                         </form>
@@ -35,7 +33,7 @@ Description: Page showing pending friend requests *@
         else
         {
             <tr>
-                <td colspan="3" class="text-center">No pending friend requests.</td>
+                <td colspan="3" class="text-center">No pending invintations.</td>
             </tr>
         }
     </tbody>

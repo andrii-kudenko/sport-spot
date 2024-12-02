@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportSpot.Services.Data;
 
@@ -10,9 +11,11 @@ using SportSpot.Services.Data;
 namespace SportSpot.Services.Migrations
 {
     [DbContext(typeof(SportsDbContext))]
-    partial class SportsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241201225441_AddNotificationsTable")]
+    partial class AddNotificationsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -134,10 +137,6 @@ namespace SportSpot.Services.Migrations
 
                     b.Property<int>("Height")
                         .HasColumnType("INTEGER");
-
-                    b.PrimitiveCollection<string>("Invintations")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()

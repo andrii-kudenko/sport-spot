@@ -51,77 +51,88 @@
             </div>
         </div>
     </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            @if (Model.LoggedInUserId == Model.ProfileUser.Id)
+            {
+                <h3>Your Events</h3>
+            }
+            else
+            {
+                <h3>@Model.ProfileUser.Name</h3>
+            }
 
-</div>
-<div class="card mt-4">
-    <div class="card-header">
-        <h3>Events Created</h3>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Sport</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Events.Any())
-                    {
-                        foreach (var eventItem in Model.Events)
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Sport</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Events.Any())
+                        {
+                            foreach (var eventItem in Model.Events)
+                            {
+                                <tr>
+                                    <td>@eventItem.Title</td>
+                                    <td>@eventItem.Date.ToString("yyyy-MM-dd")</td>
+                                    <td>@eventItem.SportType</td>
+                                    <td>
+                                        @if (Model.LoggedInUserId == Model.ProfileUser.Id)
+                                        {
+                                            <a href="/Event/EditEvent/@eventItem.Id" class="btn btn-warning btn-sm">Edit</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/Event/EventDetails/@eventItem.Id" class="btn btn-primary btn-sm">View</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>@eventItem.Title</td>
-                                <td>@eventItem.Date.ToString("yyyy-MM-dd")</td>
-                                <td>@eventItem.SportType</td>
-                                <td>
-                                    @if (Model.LoggedInUserId == Model.ProfileUser.Id)
-                                    {
-                                        <a href="/Event/EditEvent/@eventItem.Id" class="btn btn-warning btn-sm">Edit</a>
-                                    }
-                                    else
-                                    {
-                                        <a href="/Event/EventDetails/@eventItem.Id" class="btn btn-primary btn-sm">View</a>
-                                    }
-                                </td>
+                                <td colspan="4" class="text-center">No events to display.</td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="4" class="text-center">No events to display.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    @if (Model.LoggedInUserId == Model.ProfileUser.Id)
+    {
+        <div class="d-flex mt-4">
+            <div class="me-4">
+                <a asp-action="Friends" class="btn btn-outline-primary">
+                    Friends: @Model.FriendsCount
+                </a>
+            </div>
+            <div>
+                <a asp-action="FriendRequests" class="btn btn-outline-warning">
+                    Requests: @Model.PendingRequestCount
+                </a>
+            </div>
+        </div>
+    }
+    <div class="mt-4">
+        @if (!Model.Friends.Any(f => f.Id == Model.ProfileUser.Id) &&
+        !Model.FriendRequests.Any(fr => fr.Id == Model.ProfileUser.Id) &&
+        Model.LoggedInUserId != Model.ProfileUser.Id)
+        {
+            <form asp-action="SendFriendRequest" method="post">
+                <input type="hidden" name="targetUserId" value="@Model.ProfileUser.Id" />
+                <button type="submit" class="btn btn-primary">Add Friend</button>
+            </form>
+        }
+    </div>
+    
 </div>
-@if (Model.LoggedInUserId == Model.ProfileUser.Id)
-{
-    <div class="d-flex">
-        <div class="me-4">
-            <a asp-action="Friends" class="btn btn-outline-primary">
-                Friends: @Model.FriendsCount
-            </a>
-        </div>
-        <div>
-            <a asp-action="FriendRequests" class="btn btn-outline-warning">
-                Requests: @Model.PendingRequestCount
-            </a>
-        </div>
-    </div>
-}
-@if (!Model.Friends.Any(f => f.Id == Model.ProfileUser.Id) &&
-   !Model.FriendRequests.Any(fr => fr.Id == Model.ProfileUser.Id) &&
-   Model.LoggedInUserId != Model.ProfileUser.Id)
-{
-    <form asp-action="SendFriendRequest" method="post">
-        <input type="hidden" name="targetUserId" value="@Model.ProfileUser.Id" />
-        <button type="submit" class="btn btn-primary">Add Friend</button>
-    </form>
-}
+
