@@ -4,6 +4,10 @@ using SportSpot.Services.Interfaces;
 
 namespace SportSpot.Operations.Controllers
 {
+    /*  Author: Danylo Chystov
+        Description: Controller that will act as a base 
+        for any controller that is responsible for views that may show notifications counter
+    */
     public class BaseController : Controller
     {
         protected readonly INotificationInterface _notificationService;
@@ -13,6 +17,7 @@ namespace SportSpot.Operations.Controllers
             _notificationService = notificationService;
         }
 
+        //method that gets executed when controller is used to trigger unseen notification counter update and show it on inherited pages
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var userId = HttpContext.Session.GetInt32("UserId"); 
