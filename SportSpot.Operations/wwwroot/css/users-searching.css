@@ -1,5 +1,6 @@
-﻿body {
-}
+﻿/* Author: Andrii Kudenko
+   Description: css file for more appealing look of the page for searching users
+*/
 
 .highlighted {
     color:black;
@@ -9,20 +10,16 @@
     color: grey;
 }
 
-
-
-/* General Search Bar Styling */
 .search-bar {
     position: relative;
     max-width: 1200px;
     margin: 20px auto;
     border: 1px solid #ccc;
     border-radius: 8px;
-    overflow: hidden; /* Ensures the result section fits neatly */
+    overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Input Styling */
 #searchInput {
     width: 100%;
     padding: 12px 16px;
@@ -34,7 +31,7 @@
 }
 .search-icon {
     position: absolute;
-    top: 0; /* Position the bottom edge at 50% */
+    top: 0; 
     transform: translateY(50%);
     right: 8px;    
 }
@@ -42,7 +39,7 @@
     border: 1px solid #007bff;
 }
 .search-bar:focus-within .search-icon {
-    fill: #007bff; /* Highlight color */
+    fill: #007bff; 
 }
 
 #result-section {
@@ -74,28 +71,26 @@
 }
 
 
-    .users-result-list-item:hover {
-        background-color: #f0f0f0;
-        border-left: 1px solid #007bff;
-    }
-/* Default arrow styling */
+.users-result-list-item:hover {
+    background-color: #f0f0f0;
+    border-left: 1px solid #007bff;
+}
+
 .view-user-arrow {
     position: absolute;
     right: 24px;
     bottom: 50%;
     transform: translateY(50%);
     fill: #007bff;
-    opacity: 0; /* Initially hidden */
-    transition: opacity 0.3s ease; /* Smooth fade-in effect */
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
 }
 
-/* Show arrow on hover */
 .users-result-list-item:hover .view-user-arrow {
-    opacity: 1; /* Make it visible */
-    animation: moveArrow 1.5s infinite ease-in-out; /* Trigger animation */
+    opacity: 1;
+    animation: moveArrow 1.5s infinite ease-in-out;
 }
 
-/* Keyframes for left-to-right movement and fading */
 @keyframes moveArrow {
     0% {
         transform: translateY(50%) translateX(0);
@@ -115,50 +110,13 @@
 .search-view-user-btn {
     position: absolute;
     right: 8px;
-    bottom: 50%; /* Position the bottom edge at 50% */
+    bottom: 50%; 
     transform: translateY(50%);
 }
 .users-result-link {
     text-decoration: none;
     border-radius: 10px;
 }
-
-
-
-
-/*/* Result Section Styling */
-/*#result-section {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #ccc;
-    z-index: 10;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: block*/ /* Initially hidden */
-/*}*/
-
-/* Result List Styling */
-/*.users-result-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.users-result-list-item {
-    padding: 10px 16px;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}*/
-
-    /* Hover Effect */
-    /*.users-result-list-item:hover {
-        background-color: #f0f0f0;
-    }*/
-
 
 .mb-6 {
     margin-bottom: 6px;
