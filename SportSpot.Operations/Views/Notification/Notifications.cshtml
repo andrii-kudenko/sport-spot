@@ -3,11 +3,18 @@
 *@
 @{
 }
+
+@* Author: Danylo Chystov
+Description: Notifications view *@
+  
 @model List<Notification>
 
 <h3>Your Notifications</h3>
 
-<a asp-action="MarkAllAsSeen" class="btn btn-primary mb-3">Mark All as Seen</a>
+<form asp-action="MarkAllAsSeen" method="post">
+    <button type="submit" class="btn btn-outline-success">Mark All as Seen</button>
+</form>
+
 
 <table class="table">
     <thead>

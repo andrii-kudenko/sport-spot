@@ -43,11 +43,15 @@
                         }
                     </ul>
                     <ul class="navbar-nav">
+                        @* notification button with counter that is shared by all pages that controlled by controllers which inherit from base controller *@
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
                             <a asp-action="Notifications" asp-controller="Notification" class="btn btn-light">
-                                Notifications <span class="badge bg-danger">
-                                    @(ViewBag.UnseenNotificationsCount > 0 ? ViewBag.UnseenNotificationsCount.ToString() : "0")
+                                Notifications
+                                <span class="badge bg-danger ">
+                                    @(ViewBag.UnseenNotificationsCount != null && (int)ViewBag.UnseenNotificationsCount > 0
+                                        ? ViewBag.UnseenNotificationsCount.ToString()
+                                        : "0")
                                 </span>
                             </a>
                             <li class="nav-item">

@@ -2,6 +2,9 @@
 
 namespace SportSpot.Operations.Models
 {
+    /*  Author: Danylo Chystov
+        Description: Class that holds data needed to be displayed on the profile view
+    */
     public class ProfileViewModel
     {
         public User ProfileUser { get; set; }  // The user whose profile is being viewed

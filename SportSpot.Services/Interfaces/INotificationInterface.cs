@@ -7,6 +7,9 @@ using SportSpot.Entities.Models;
 
 namespace SportSpot.Services.Interfaces
 {
+    /*  Author: Danylo Chystov
+        Description: Interface for notification service
+    */
     public interface INotificationInterface
     {
         Task AddNotificationAsync(int userId, string message, string actionUrl);
