@@ -14,7 +14,7 @@ namespace SportSpot.Services.Interfaces
         Task<User> CreateUserAsync(User user);
         //Task<User> GetUserByEmailAsync(string email);  
         Task<List<User>> GetUsersByQuery(string query, int? excludeId);
-        //"friends" functionality related
+        //"friends" functionality related,  by Danylo Chystov
         Task<OperationResult> SendFriendRequestAsync(int userId, int targetUserId);
         Task<OperationResult> AcceptFriendRequestAsync(int userId, int requesterId);
         Task<OperationResult> DeclineFriendRequestAsync(int userId, int requesterId);

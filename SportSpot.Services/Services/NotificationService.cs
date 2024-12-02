@@ -19,6 +19,12 @@ namespace SportSpot.Services.Services
             _context = dbContext;
         }
 
+        /*
+            Author: Danylo Chystov
+            Description: Adds new notification when called
+            Parameter: int id of recepient, string message to be shown in notification, string url to page that shows on Action button click
+            Return: none
+         */
         public async Task AddNotificationAsync(int userId, string message, string actionUrl)
         {
             var notification = new Notification
@@ -31,6 +37,12 @@ namespace SportSpot.Services.Services
             await _context.SaveChangesAsync();
         }
 
+        /*
+            Author: Danylo Chystov
+            Description: Method used to get unseen notifications
+            Parameter: int id of user (possibly any user, practically logged in user)
+            Return: list of Notificstion type objects
+         */
         public async Task<List<Notification>> GetUnseenNotificationsAsync(int userId)
         {
             return await _context.Set<Notification>()
@@ -39,6 +51,12 @@ namespace SportSpot.Services.Services
                 .ToListAsync();
         }
 
+        /*
+            Author: Danylo Chystov
+            Description: Fetches all notifications 
+            Parameter: int id of user (possibly any user, practically logged in user)
+            Return: list of notification type objects
+         */
         public async Task<List<Notification>> GetNotificationsAsync(int userId)
         {
             return await _context.Set<Notification>()
@@ -47,6 +65,12 @@ namespace SportSpot.Services.Services
                 .ToListAsync();
         }
 
+        /*
+            Author: Danylo Chystov
+            Description: Marks all notifications as seen(changes isSeen property) , for all notifications with matching to passed user id, and wich are not seen changes property of isSeen to true
+            Parameter: int id of user (possibly any user, practically logged in user)
+            Return: nothing
+         */
         public async Task MarkAllAsSeenAsync(int userId)
         {
             var notifications = await _context.Set<Notification>()
