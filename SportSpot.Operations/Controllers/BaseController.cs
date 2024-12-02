@@ -19,6 +19,7 @@ namespace SportSpot.Operations.Controllers
             if (userId != null)
             {
                 var unseenCount = _notificationService.GetUnseenNotificationsAsync(userId.Value).Result.Count;
+                HttpContext.Session.SetInt32("UnseenNotificationsCount", unseenCount);
                 ViewBag.UnseenNotificationsCount = unseenCount;
             }
             else
@@ -26,6 +27,7 @@ namespace SportSpot.Operations.Controllers
                 //if the user is not logged-in 0 notifications
                 ViewBag.UnseenNotificationsCount = 0;
             }
+
             base.OnActionExecuting(context); 
         }
     }

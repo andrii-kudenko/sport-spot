@@ -45,9 +45,9 @@
                     <ul class="navbar-nav">
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
-                            <a asp-action="Notifications" asp-controller="Notification" class="btn btn-secondary">
+                            <a asp-action="Notifications" asp-controller="Notification" class="btn btn-light">
                                 Notifications <span class="badge bg-danger">
-                                    @ViewBag.UnseenNotificationsCount
+                                    @(ViewBag.UnseenNotificationsCount > 0 ? ViewBag.UnseenNotificationsCount.ToString() : "0")
                                 </span>
                             </a>
                             <li class="nav-item">

@@ -217,7 +217,7 @@ namespace SportSpot.Operations.Controllers
         {
             try
             {
-                // Check if Mode is Valid or now
+                // Check if Model is Valid or now
                 if (ModelState.IsValid)
                 {
                     await _eventInterface.UpdateEventAsync(@event);

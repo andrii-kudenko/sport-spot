@@ -21,6 +21,7 @@ namespace SportSpot.Operations.Controllers
             }
 
             var notifications = await _notificationService.GetNotificationsAsync(userId.Value);
+
             return View(notifications);
         }
 
@@ -33,6 +34,7 @@ namespace SportSpot.Operations.Controllers
             }
 
             await _notificationService.MarkAllAsSeenAsync(userId.Value);
+
             return RedirectToAction("Notifications");
         }
     }
