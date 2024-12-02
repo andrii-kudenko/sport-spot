@@ -10,12 +10,12 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SportSpot.Operations.Controllers
 {
-    public class SearchController : Controller
+    public class SearchController : BaseController
     {
         private readonly IEventInterface _eventInterface;
         private readonly IUserInterface _userInterface;
 
-        public SearchController(IEventInterface eventInterface, IUserInterface userInterface)
+        public SearchController(IEventInterface eventInterface, IUserInterface userInterface, INotificationInterface notificationService): base(notificationService) 
         {
             _eventInterface = eventInterface;
             _userInterface = userInterface;

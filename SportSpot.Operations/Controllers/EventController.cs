@@ -11,16 +11,15 @@ using SportSpot.Services.Interfaces;
 
 namespace SportSpot.Operations.Controllers
 {
-    public class EventController : Controller
+    public class EventController : BaseController
     {
         // Event Service using Sqlite Service
         private readonly IEventInterface _eventInterface;
 
         // User Service using Sqlite Service
         private readonly IUserInterface _userInterface;
-
         // Constructor to inject the Interface for Event and User
-        public EventController(IEventInterface eventInterface, IUserInterface userInterface)
+        public EventController(IEventInterface eventInterface, IUserInterface userInterface, INotificationInterface notificationService): base(notificationService)
         {
             _eventInterface = eventInterface;
             _userInterface = userInterface;
@@ -218,7 +217,7 @@ namespace SportSpot.Operations.Controllers
         {
             try
             {
-                // Check if Mode is Valid or now
+                // Check if Model is Valid or now
                 if (ModelState.IsValid)
                 {
                     await _eventInterface.UpdateEventAsync(@event);

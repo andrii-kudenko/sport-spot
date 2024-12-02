@@ -37,8 +37,10 @@ builder.Services.AddDbContext<SportsDbContext>(options =>
 // Add interfaces
 builder.Services.AddScoped<IEventInterface, EventService>();
 builder.Services.AddScoped<IUserInterface, UserService>();
+builder.Services.AddScoped<INotificationInterface, NotificationService>();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
