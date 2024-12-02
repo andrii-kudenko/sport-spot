@@ -1,4 +1,8 @@
-﻿@model SportSpot.Entities.Models.Event
+﻿<!--
+    Author: Omar
+    Description: View for CreateEvent method in the Controller which input User information about the event as well as the User Creator
+-->
+@model SportSpot.Entities.Models.Event
 
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -48,10 +52,12 @@
                             <span asp-validation-for="RequiredPlayers" class="text-danger"></span>
                         </div>
 
+                        <!--Create Event Button-->
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-plus-circle"></i> Create Event
                             </button>
+                            <!--Go back to Index Button-->
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left"></i> Back to List
                             </a>

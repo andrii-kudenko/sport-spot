@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+    Author: Nhat Truong Luu, Omar
+    Description: Event Interface which deals with Event CRUD as well as Logic for Searching Events for Searching functionalities
+ */
+
+using System;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using SportSpot.Entities.Models;
@@ -9,6 +14,7 @@ namespace SportSpot.Services.Services
 {
     public class EventService : IEventInterface
     {
+        // Context DbClass using SportsDbContext 
         private readonly SportsDbContext _context;
 
         public EventService(SportsDbContext context)
@@ -16,6 +22,12 @@ namespace SportSpot.Services.Services
             _context = context;
         }
 
+        /*
+            Author: Omar
+            Description: Create Event and Save in the Database
+            Parameter: Event @event: Event chosen
+            Return: The created Event and update in Database
+         */
         public async Task<Event> CreateEventAsync(Event @event)
         {
             try
@@ -39,6 +51,13 @@ namespace SportSpot.Services.Services
             }
         }
 
+
+        /*
+            Author: Omar
+            Description: Get all Events in the database
+            Parameter: Event @event: Event chosen
+            Return: All Events in Database
+         */
         public async Task<List<Event>> GetAllEventsAsync()
         {
             try
@@ -59,6 +78,12 @@ namespace SportSpot.Services.Services
             }
         }
 
+        /*
+            Author: Omar, Nhat Truong
+            Description: Get Event based on Id
+            Parameter: int id: Id of Event
+            Return: The found Event
+         */
         public async Task<Event> GetEventByIdAsync(int id)
         {
             return await _context.Events
@@ -67,6 +92,12 @@ namespace SportSpot.Services.Services
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        /*
+            Author: Omar
+            Description: Find Event based on the Creator
+            Parameter: int creatorId: Id of Creator
+            Return: The finding Event
+         */
         public async Task<List<Event>> GetEventsByCreatorAsync(int creatorId)
         {
             return await _context.Events
@@ -80,6 +111,12 @@ namespace SportSpot.Services.Services
         //    return @event;
         //}
 
+        /*
+            Author: Nhat Truong
+            Description: Update new instance of Event and Save database
+            Parameter: Event @event: The updated Event
+            Return: Update Database
+         */
         public async Task<Event> UpdateEventAsync(Event @event)
         {
             //_context.Entry(@event).State = EntityState.Modified;
@@ -106,6 +143,12 @@ namespace SportSpot.Services.Services
 
         }
 
+        /*
+            Author: Omar
+            Description: Delete Event
+            Parameter: int id: Id of Event
+            Return: Update the Database
+         */
         public async Task DeleteEventAsync(int id)
         {
             var @event = await _context.Events.FindAsync(id);
@@ -116,6 +159,12 @@ namespace SportSpot.Services.Services
             }
         }
 
+        /*
+            Author: Omar
+            Description: Find Event based on the Location
+            Parameter: string location: Location of Event to find
+            Return: The finding Event
+         */
         public async Task<List<Event>> SearchEventsByLocationAsync(string location)
         {
             return await _context.Events
@@ -125,6 +174,12 @@ namespace SportSpot.Services.Services
                 .ToListAsync();
         }
 
+        /*
+            Author: Omar
+            Description: Search Event By Sports Type
+            Parameter: Sports sportType: SportsType of Event to find
+            Return: The finding Event
+         */
         public async Task<List<Event>> SearchEventsBySportTypeAsync(Sports sportType)
         {
             return await _context.Events
@@ -134,6 +189,12 @@ namespace SportSpot.Services.Services
                 .ToListAsync();
         }
 
+        /*
+            Author: 
+            Description: Get Filtered Event
+            Parameter: 
+            Return:
+         */
         public async Task<List<Event>> GetFilteredEvents(string? searchTerm, Sports? category, DateOnly? date, string? location)
         {
             var events = _context.Events;

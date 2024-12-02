@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Search Events";
+    Layout = "~/Views/Shared/_SearchingLayout.cshtml";
 }
 
 <h2>Search Events</h2>
@@ -9,57 +10,56 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <!-- Filters Section -->
-        <div class="col-md-3 col-lg-2">
-            <div class="p-3 border bg-light">
-                <h5>Filters</h5>
+        <div class="col-md-5 col-lg-4">
+            <div class="filters">
                 <form>
                     <div class="mb-3">
                         <h6>Categories</h6>
-                        <ul class="list-group">
-                            <li class="list-group-item @(string.IsNullOrEmpty(Model.SelectedCategory) ? "active" : "")">
-                                <a asp-controller="Search" asp-action="Events">All Categories</a>
+                        <ul class="categories-list">
+                                <a class="category-filter asp-controller="Search" asp-action="Events">
+                            <li class="category-list-item @(string.IsNullOrEmpty(Model.SelectedCategory) ? "active-category" : "")">
+                                    All Categories
                             </li>
+                                </a>
                             @foreach (var category in Model.Categories)
                             {
-                                <li class="list-group-item @(category.ToString() == Model.SelectedCategory ? "active" : "")">
-                                    <a asp-controller="Search" asp-action="Events" asp-route-category="@category">
+                                    <a class="category-filter asp-controller="Search" asp-action="Events" asp-route-category="@category">
+                                <li class="category-list-item @(category.ToString() == Model.SelectedCategory ? "active-category" : "")">
                                         @category
-                                    </a>
                                 </li>
+                                    </a>
                             }
                         </ul>
-                        
-                        <form asp-controller="Search" asp-action="Events" method="get" class="mb-3">
-                            <div class="mb-2">
-                                <label for="startDate">Date</label>
-                                <input type="date" id="date" name="date" value="@Model.Date?.ToString("yyyy-MM-dd")" class="form-control" />
-                            </div>          
-                            <div class="mb-2">
-                                <label for="location">Location</label>
-                                <input type="text" id="location" name="location" value="@Model.Location" class="form-control" placeholder="Enter location" />
-                            </div>
-                            <button type="submit" class="btn btn-primary">Apply Filters</button>
-                        </form>
-
-                    </div>                    
+                    </div>
+                    <div class="mb-3">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" value="@Model.Date?.ToString("yyyy-MM-dd")" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" value="@Model.Location" class="form-control" placeholder="Enter location" />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Apply Filters</button>
                 </form>
             </div>
+
         </div>
 
         <!-- Results Section -->
-        <div class="col-md-9 col-lg-10">
+        <div class="col-md-7 col-lg-8">
             <div class="row g-3">
                 @if (Model.SearchResults.Any())
                 {
                     @foreach (var item in Model.SearchResults)
                     {
-                            <div class="card h-100 shadow-sm m-2" style="width: 18rem;">
+                        <div class="col-md-5">
+                            <div class="card h-100 shadow-sm">
                                 <div class="card-body">
                                     <h5 class="card-title">@item.Title</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">
                                         <i class="bi bi-calendar"></i> @item.Date.ToString("MMM dd, yyyy HH:mm")
                                     </h6>
-                                    <p class="card-text text-truncate">@item.Description</p>
+                                    <p class="card-text">@item.Description</p>
                                     <div class="mb-2">
                                         <span class="badge bg-primary">@item.SportType</span>
                                         <span class="badge bg-secondary">
@@ -71,19 +71,21 @@
                                         <span>@item.Location</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-transparent">
+                                <div class="card-footer">
                                     <a asp-action="EventDetails" asp-controller="Event" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
                                         <i class="bi bi-info-circle"></i> View Details
                                     </a>
                                 </div>
                             </div>
+                        </div>
                     }
                 }
                 else
                 {
-                    <p>No results found for the selected category.</p>
+                    <p class="text-center">No results found for the selected category.</p>
                 }
             </div>
+
         </div>
     </div>
 </div>
