@@ -8,17 +8,17 @@ using SportSpot.Services.Services;
 
 namespace SportSpot.Operations.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserInterface _userInterface;
         private readonly IEventInterface _eventInterface;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(IUserInterface userInterface, IEventInterface eventInterface)
+        public UserController(IUserInterface userInterface, IEventInterface eventInterface, INotificationInterface notificationService): base(notificationService)
         {
+            
             _userInterface = userInterface;
             _eventInterface = eventInterface;
-
         }
 
         
@@ -81,7 +81,7 @@ namespace SportSpot.Operations.Controllers
             }
 
             await _userInterface.SendFriendRequestAsync(loggedInUserId.Value, targetUserId);
-
+            await _notificationService.AddNotificationAsync(targetUserId, "You have a new friend request!", "/User/FriendRequests");
             return RedirectToAction("Profile", new {id = targetUserId});
         }
 
@@ -94,7 +94,7 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction("Login", "Auth");
             }
             await _userInterface.AcceptFriendRequestAsync(loggedInUserId.Value, requesterId);
-
+            await _notificationService.AddNotificationAsync(requesterId,"Your friend request has been accepted!","/User/Friends");
             return RedirectToAction("FriendRequests");
         }
 
@@ -107,6 +107,7 @@ namespace SportSpot.Operations.Controllers
                 return RedirectToAction("Login", "Auth");
             }
             await _userInterface.DeclineFriendRequestAsync(loggedInUserId.Value, requesterId);
+            await _notificationService.AddNotificationAsync(requesterId,"Your friend request was declined.","/User/Search");
 
             return RedirectToAction("FriendRequests");
         }

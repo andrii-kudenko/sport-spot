@@ -13,6 +13,7 @@ namespace SportSpot.Services.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,7 +29,13 @@ namespace SportSpot.Services.Data
                 .HasMany(e => e.RegisteredPlayers)
                 .WithMany()
                 .UsingEntity(j => j.ToTable("EventParticipants"));
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
         }
+
+       
     }
 }
 

@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<Notification>
+
+<h3>Your Notifications</h3>
+
+<a asp-action="MarkAllAsSeen" class="btn btn-primary mb-3">Mark All as Seen</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notification in Model)
+        {
+            <tr class="@(notification.IsSeen ? "" : "table-warning")">
+                <td>@notification.Message</td>
+                <td>@notification.CreatedAt.ToString("g")</td>
+                <td>
+                    <a href="@notification.ActionUrl" class="btn btn-primary">Go</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -6,12 +6,12 @@ using SportSpot.Services.Interfaces;
 
 namespace SportSpot.Operations.Controllers
 {
-    public class EventController : Controller
+    public class EventController : BaseController
     {
         private readonly IEventInterface _eventInterface;
         private readonly IUserInterface _userInterface;
 
-        public EventController(IEventInterface eventInterface, IUserInterface userInterface)
+        public EventController(IEventInterface eventInterface, IUserInterface userInterface, INotificationInterface notificationService): base(notificationService)
         {
             _eventInterface = eventInterface;
             _userInterface = userInterface;

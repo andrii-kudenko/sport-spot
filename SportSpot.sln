@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportSpot.Operations", "SportSpot.Operations\SportSpot.Operations.csproj", "{F95E1C4A-0AD5-47B7-98D7-953B38D7D640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportSpot.Operations", "SportSpot.Operations\SportSpot.Operations.csproj", "{F95E1C4A-0AD5-47B7-98D7-953B38D7D640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportSpot.Entities", "SportSpot.Entities\SportSpot.Entities.csproj", "{6F891C1F-84DE-40B9-A0CC-893681877DE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportSpot.Entities", "SportSpot.Entities\SportSpot.Entities.csproj", "{6F891C1F-84DE-40B9-A0CC-893681877DE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportSpot.Services", "SportSpot.Services\SportSpot.Services.csproj", "{131E6ED7-9C26-4971-827C-029A8B2ED413}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportSpot.Services", "SportSpot.Services\SportSpot.Services.csproj", "{131E6ED7-9C26-4971-827C-029A8B2ED413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -41,6 +41,11 @@
                     <ul class="navbar-nav">
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
+                            <a asp-action="Notifications" asp-controller="Notification" class="btn btn-secondary">
+                                Notifications <span class="badge bg-danger">
+                                    @ViewBag.UnseenNotificationsCount
+                                </span>
+                            </a>
                             <li class="nav-item">
                                 <span class="nav-link text-dark">
                                     <i class="bi bi-person"></i> @Context.Session.GetString("UserName")
